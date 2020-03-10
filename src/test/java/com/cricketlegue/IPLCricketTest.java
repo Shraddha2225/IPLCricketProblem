@@ -55,4 +55,14 @@ public class IPLCricketTest {
        // Assert.assertEquals("Andre Russell", censusCSV[censusCSV.length-1].player);
         Assert.assertEquals(204.81, censusCSV[censusCSV.length-1].strikingrates,00);
     }
+
+    @Test
+    public void givenIPLRunsData_whenSortedByStrikeRate_ShouldReturnTopAverage() throws IPLExceptionAnalyser {
+        IPLCricketAnalyser iplAnalyser = new IPLCricketAnalyser();
+        iplAnalyser.loadIplData(IPL_MOST_RUNS_CSV_FILE_PATH);
+        String loadIplData = iplAnalyser.getSortedIPLData(SortedField.AVERAGE);
+        IPLCricketDTO[] censusCSV = new Gson().fromJson(loadIplData, IPLCricketDTO[].class);
+        // Assert.assertEquals("Andre Russell", censusCSV[censusCSV.length-1].player);
+        Assert.assertEquals(134.62, censusCSV[censusCSV.length-1].strikingrates,00);
+    }
 }
