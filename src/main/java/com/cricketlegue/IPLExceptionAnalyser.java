@@ -1,10 +1,7 @@
 package com.cricketlegue;
-
-import java.lang.reflect.Type;
-
 public class IPLExceptionAnalyser extends Exception{
     enum ExceptionType{
-        FILE_NOT_FOUND
+        NO_CENSUS_DATA,FILE_NOT_FOUND,NO_DATA_AVAIL
     }
     ExceptionType type;
 

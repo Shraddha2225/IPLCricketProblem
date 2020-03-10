@@ -9,6 +9,10 @@ public class IPLCricketRunCSV {
     @CsvBindByName(column = "Runs" , required = true)
     public int runs;
 
+    public double getAverage() {
+        return average;
+    }
+
     @CsvBindByName(column = "Avg", required = true)
     public double average;
 
