@@ -15,7 +15,7 @@ public class IPLCricketDTO {
         runs = iplCricketDTO.runs;
         average = iplCricketDTO.average;
         fours = iplCricketDTO.fours;
-        sixs = iplCricketDTO.sixs;
+        sixs = iplCricketDTO.sixes;
         strikingrates = iplCricketDTO.strikingrates;
 
     }

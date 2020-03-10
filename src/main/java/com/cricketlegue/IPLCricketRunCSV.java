@@ -20,7 +20,7 @@ public class IPLCricketRunCSV {
     public int  fours;
 
     @CsvBindByName(column = "6s" ,required = true)
-    public int sixs;
+    public int sixes;
 
     public double getStrikingrates() {
         return strikingrates;
@@ -37,7 +37,7 @@ public class IPLCricketRunCSV {
                 ", runs=" + runs +
                 ", average=" + average +
                 ", fours=" + fours +
-                ", sixs=" + sixs +
+                ", sixs=" + sixes +
                 ", strikingrates=" + strikingrates +
                 '}';
     }
