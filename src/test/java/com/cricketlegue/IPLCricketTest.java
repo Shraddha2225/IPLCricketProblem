@@ -51,4 +51,12 @@ public class IPLCricketTest {
         System.out.println(sortedCensusData);
         //Assert.assertEquals("Andre Russell",sortedCensusData.get(0).player);
     }
+    @Test
+    public void givenMostRunFile_ShoulReturn() throws IPLExceptionAnalyser, IOException, CSVBuilderException {
+        IPLCricketAnalyser ipLleagueAnalysis = new IPLCricketAnalyser();
+        ipLleagueAnalysis.loadIplRunData(IPL_MOST_RUNS_CSV_FILE_PATH);
+        List<IPLCricketRunCSV> sortedCensusData = ipLleagueAnalysis.sortingPlayersByStrikeRates();
+        System.out.println(sortedCensusData);
+        Assert.assertEquals("Andre Russell",sortedCensusData.get(0).player);
+    }
 }

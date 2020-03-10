@@ -55,6 +55,16 @@ public class IPLCricketAnalyser {
         return sortedList;
     }
 
+    public List sortingPlayersByStrikeRates() throws IPLExceptionAnalyser {
+        if (list == null || list.size() == 0){
+            throw new IPLExceptionAnalyser("NO_CENSUS_DATA", IPLExceptionAnalyser.ExceptionType.NO_DATA_AVAIL);
+        }
+        List sortedList = list.stream().collect(Collectors.toList());
+        Comparator<IPLCricketRunCSV> codeCsvComparator = (player1, player2) -> new Integer((player1.fours*4 + player1.sixes*6) > (player2.fours*4 + player2.sixes*6) ? -1 : 1);
+        codeCsvComparator = codeCsvComparator.thenComparing(IPLCricketRunCSV::getStrikingrates);
+        Collections.sort(sortedList,codeCsvComparator);
+        return sortedList;
+    }
 }
 
 
