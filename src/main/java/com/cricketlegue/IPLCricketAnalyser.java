@@ -1,6 +1,5 @@
 package com.cricketlegue;
 
-import com.csvfile.CSVBuilderException;
 import com.csvfile.CSVBuilderFactory;
 import com.csvfile.ICSVBuilder;
 import com.google.gson.Gson;
@@ -13,58 +12,55 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class IPLCricketAnalyser {
-    List<IPLCricketRunCSV> list = new ArrayList<>();
+public class IPLCricketAnalyser extends Throwable {
+    Map<SortedField, Comparator<IPLCricketDTO>> sortedMap=null;
+    Map<String, IPLCricketDTO> iplCricketMap =new HashMap<>();
+    private List<IPLCricketDTO> iplCricketDTOList;
 
-    public int loadIplRunData(String csvFilePath) throws IPLExceptionAnalyser, IOException, CSVBuilderException {
+    public IPLCricketAnalyser() {
+        sortedMap = new HashMap<>();
+        this.sortedMap.put(SortedField.AVERAGE,Comparator.comparing(census -> census.average));
+        this.sortedMap.put(SortedField.STRIKE_RATE,Comparator.comparing(census -> census.strikingrates));
+        this.sortedMap.put(SortedField.FOUR_AND_SIX,Comparator.comparing(census -> census.fours + census.sixs));
 
-        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
-            ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
-            List playersList = icsvBuilder.getCSVFileList(reader, IPLCricketRunCSV.class);
-            playersList.stream().filter(CensusData -> list.add((IPLCricketRunCSV) CensusData)).collect(Collectors.toList());
-            return playersList.size();
+    }
+    public void loadIplData(String FilePath) throws IPLExceptionAnalyser {
+        try (Reader reader = Files.newBufferedReader(Paths.get(FilePath))) {
+            ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
+            Iterator <IPLCricketRunCSV> iterator = csvBuilder.getCSVFileIterator(reader, IPLCricketRunCSV.class);
+            Iterable< IPLCricketRunCSV > csvIterable = () -> iterator;
+            StreamSupport.stream(csvIterable.spliterator(), false)
+                    .forEach(csvName -> iplCricketMap.put(csvName.player,new IPLCricketDTO(csvName)));
+            System.out.println(iplCricketMap);
+           // return iplCricketMap.size();
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (CSVBuilderException e) {
-            e.printStackTrace();
+            throw new IPLExceptionAnalyser(e.getMessage(), IPLExceptionAnalyser.ExceptionType.CENSUS_FILE_PROBLEM);
         }
-        return 0;
     }
 
-    public List sortingPlayersDataInReverse() throws IPLExceptionAnalyser {
-        if(list == null || list.size() == 0) {
-            throw new IPLExceptionAnalyser("NO_CENSUS_DATA", IPLExceptionAnalyser.ExceptionType.NO_DATA_AVAIL);
+    public String getSortedIPLData(SortedField field) throws IPLExceptionAnalyser {
+        if (iplCricketMap == null || iplCricketMap.size() == 0) {
+            throw new IPLExceptionAnalyser("No Census Data",IPLExceptionAnalyser.ExceptionType.NO_CENSUS_DATA);
         }
-        List sortedList = list.stream().sorted(Comparator.comparing(IPLCricketRunCSV::getAverage).reversed()).collect(Collectors.toList());
-        return sortedList;
-    }
-    public List sortingPlayersForStriker() throws IPLExceptionAnalyser {
-        if (list == null || list.size() == 0){
-            throw new IPLExceptionAnalyser("NO_CENSUS_DATA", IPLExceptionAnalyser.ExceptionType.NO_DATA_AVAIL);
-        }
-        List sortedList = list.stream().sorted(Comparator.comparing(IPLCricketRunCSV::getStrikingrates).reversed()).collect(Collectors.toList());
-        return sortedList;
-    }
-    public List sortingPlayersSixsAndFour() throws IPLExceptionAnalyser {
-        if (list == null || list.size() == 0){
-            throw new IPLExceptionAnalyser("NO_CENSUS_DATA", IPLExceptionAnalyser.ExceptionType.NO_DATA_AVAIL);
-        }
-        List sortedList = list.stream().collect(Collectors.toList());
-        Comparator<IPLCricketRunCSV> codeCsvComparator = (player1, player2) -> new Integer((player1.fours*4 + player1.sixes*6) > (player2.fours*4 + player2.sixes*6) ? -1 : 1);
-        Collections.sort(sortedList,codeCsvComparator);
-        return sortedList;
+        iplCricketDTOList = iplCricketMap.values().stream().collect(Collectors.toList());
+        this.sort(iplCricketDTOList, this.sortedMap.get(field));
+        String sortedStateCensusJson = new Gson().toJson(iplCricketDTOList);
+        return sortedStateCensusJson;
     }
 
-    public List sortingPlayersByStrikeRates() throws IPLExceptionAnalyser {
-        if (list == null || list.size() == 0){
-            throw new IPLExceptionAnalyser("NO_CENSUS_DATA", IPLExceptionAnalyser.ExceptionType.NO_DATA_AVAIL);
+    private void sort( List<IPLCricketDTO> iplCricketDTOList, Comparator<IPLCricketDTO> iplCSVComparator) {
+        for (int i = 0; i < this.iplCricketDTOList.size() - 1; i++) {
+            for (int j = 0; j < this.iplCricketDTOList.size() - i - 1; j++) {
+                IPLCricketDTO census1 = this.iplCricketDTOList.get(j);
+                IPLCricketDTO census2 = this.iplCricketDTOList.get(j + 1);
+                if (iplCSVComparator.compare(census1, census2) > 0) {
+                    this.iplCricketDTOList.set(j, census2);
+                    this.iplCricketDTOList.set(j + 1, census1);
+                }
+            }
         }
-        List sortedList = list.stream().collect(Collectors.toList());
-        Comparator<IPLCricketRunCSV> codeCsvComparator = (player1, player2) -> new Integer((player1.fours*4 + player1.sixes*6) > (player2.fours*4 + player2.sixes*6) ? -1 : 1);
-        codeCsvComparator = codeCsvComparator.thenComparing(IPLCricketRunCSV::getStrikingrates);
-        Collections.sort(sortedList,codeCsvComparator);
-        return sortedList;
     }
+
 }
 
 
