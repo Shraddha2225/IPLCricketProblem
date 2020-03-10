@@ -34,4 +34,13 @@ public class IPLCricketTest {
         ipLleagueAnalysis.loadIplRunData(IPL_MOST_RUNS_CSV_FILE_PATH);
     }
 
+    @Test
+    public void givenMostRunFile_ShouldReturnTopStriker() throws IOException, CSVBuilderException, IPLExceptionAnalyser {
+        IPLCricketAnalyser ipLleagueAnalysis = new IPLCricketAnalyser();
+        ipLleagueAnalysis.loadIplRunData(IPL_MOST_RUNS_CSV_FILE_PATH);
+        List<IPLCricketRunCSV> sortedCensusData = ipLleagueAnalysis.sortingPlayersForStriker();
+        System.out.println(sortedCensusData);
+        Assert.assertEquals(333.33,sortedCensusData.get(0).strikingrates,0);
+    }
+
 }

@@ -22,6 +22,10 @@ public class IPLCricketRunCSV {
     @CsvBindByName(column = "6s" ,required = true)
     public int sixs;
 
+    public double getStrikingrates() {
+        return strikingrates;
+    }
+
     @CsvBindByName(column = "SR", required = true)
     public double strikingrates;
 

@@ -26,7 +26,6 @@ public class IPLCricketAnalyser {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (CSVBuilderException e) {
-            //throw new IPLExceptionAnalyser("FILE_NOT_FOUND",IPLExceptionAnalyser.ExceptionType.FILE_NOT_FOUND);
             e.printStackTrace();
         }
         return 0;
@@ -37,6 +36,13 @@ public class IPLCricketAnalyser {
             throw new IPLExceptionAnalyser("NO_CENSUS_DATA", IPLExceptionAnalyser.ExceptionType.NO_DATA_AVAIL);
         }
         List sortedList = list.stream().sorted(Comparator.comparing(IPLCricketRunCSV::getAverage).reversed()).collect(Collectors.toList());
+        return sortedList;
+    }
+    public List sortingPlayersForStriker() throws IPLExceptionAnalyser {
+        if (list == null || list.size() == 0){
+            throw new IPLExceptionAnalyser("NO_CENSUS_DATA", IPLExceptionAnalyser.ExceptionType.NO_DATA_AVAIL);
+        }
+        List sortedList = list.stream().sorted(Comparator.comparing(IPLCricketRunCSV::getStrikingrates).reversed()).collect(Collectors.toList());
         return sortedList;
     }
 
