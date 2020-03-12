@@ -22,36 +22,15 @@ public class IPLCricketAnalyser extends Throwable {
         this.sortedMap.put(SortedField.STRIKE_RATE,Comparator.comparing(census -> census.strikingrates));
         this.sortedMap.put(SortedField.FOUR_AND_SIX,Comparator.comparing(census -> census.fours + census.sixs));
         this.sortedMap.put(SortedField.RUNS,Comparator.comparing(census -> census.runs));
+        this.sortedMap.put(SortedField.ECONOMY, Comparator.comparing(census -> census.economy));
     }
 
     public void loadIplRunData(String FilePath) throws IPLExceptionAnalyser {
-        this.loadIplData(IPLCricketRunCSV.class, FilePath);
+        iplCricketMap = new IplDataLoader().loadIplData(IPLCricketRunCSV.class, FilePath);
     }
 
     public void loadIPLCricketWicketsData(String FilePath) throws IPLExceptionAnalyser {
-        this.loadIplData(IPLCricketWicketCSV.class, FilePath);
-    }
-
-    public <E> void loadIplData(Class<E> IplCSV, String FilePath) throws IPLExceptionAnalyser {
-        try (Reader reader = Files.newBufferedReader(Paths.get(FilePath))) {
-            ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator <E> iterator = csvBuilder.getCSVFileIterator(reader, IplCSV);
-            Iterable<E> csvIterable = () -> iterator;
-            if (IplCSV.getName() == "com.cricketlegue.IPLCricketRunCSV") {
-                StreamSupport.stream(csvIterable.spliterator(), false)
-                        .map(IPLCricketRunCSV.class::cast)
-                        .forEach(csvName -> iplCricketMap.put(csvName.player, new IPLCricketDTO(csvName)));
-            }
-            else if (IplCSV.getName() == "com.cricketlegue.IPLCricketWicketCSV") {
-                StreamSupport.stream(csvIterable.spliterator(), false)
-                        .map((IPLCricketWicketCSV.class::cast))
-                        .forEach(csvName -> iplCricketMap.put(csvName.player, new IPLCricketDTO(csvName)));
-            }
-           // System.out.println(iplCricketMap);
-        } catch (IOException ex) {
-            throw new IPLExceptionAnalyser(ex.getMessage(), IPLExceptionAnalyser.ExceptionType.CENSUS_FILE_PROBLEM);
-        }
-
+        iplCricketMap = new IplDataLoader().loadIplData(IPLCricketWicketCSV.class, FilePath);
     }
 
     public String getSortedIPLData(SortedField field) throws IPLExceptionAnalyser {

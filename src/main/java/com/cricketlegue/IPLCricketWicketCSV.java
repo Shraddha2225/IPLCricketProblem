@@ -20,16 +20,21 @@ public class IPLCricketWicketCSV {
     @CsvBindByName(column = "Avg", required = true)
     public double average;
 
-
     @Override
     public String toString() {
-        return "IplWicketsCSV{" + '\''+
-                "Player = " +player +'\''+
-                "Runs=" + runs + '\'' +
-                ", Avg = "+average +'\'' +
-                ", Four =" + four + '\'' +
-                ", Five Wickets = " + five +'\'' +
-                "Strike Rate = " + strikingrates + '\''+
+        return "IPLCricketWicketCSV{" +
+                "player='" + player + '\'' +
+                ", runs=" + runs +
+                ", four=" + four +
+                ", five=" + five +
+                ", strikingrates=" + strikingrates +
+                ", average=" + average +
+                ", economy=" + economy +
                 '}';
     }
+
+    @CsvBindByName(column = "Econ", required = true)
+    public double economy;
+
+
 }

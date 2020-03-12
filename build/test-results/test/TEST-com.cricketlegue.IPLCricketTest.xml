@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.cricketlegue.IPLCricketTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-03-12T00:53:51" hostname="DESKTOP-PIERT2Q" time="0.511">
+<testsuite name="com.cricketlegue.IPLCricketTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2020-03-12T01:13:47" hostname="DESKTOP-PIERT2Q" time="1.682">
   <properties/>
-  <testcase name="givenIplWicketsData_WhenSorted_ShouldReturnTopStrikeRate" classname="com.cricketlegue.IPLCricketTest" time="0.511"/>
+  <testcase name="givenIPLRunsData_whenSorted_ShouldReturnStrikkingRate" classname="com.cricketlegue.IPLCricketTest" time="0.543"/>
+  <testcase name="givenIPLRunsData_whenSortedByStrikeRate_ShouldReturnTopAverage" classname="com.cricketlegue.IPLCricketTest" time="0.159"/>
+  <testcase name="givenIPLRunsData_whenSortedByRuns_ShouldReturnTopAverage" classname="com.cricketlegue.IPLCricketTest" time="0.145"/>
+  <testcase name="givenIPLRunsData_whenSorted_ShouldReturnMaxSixAndFour" classname="com.cricketlegue.IPLCricketTest" time="0.136"/>
+  <testcase name="givenMostRunFile_WhenSorted_ShouldReturnTopRunAverage" classname="com.cricketlegue.IPLCricketTest" time="0.122"/>
+  <testcase name="givenIplWicketsData_WhenSorted_ShouldReturnTopStrikeRate" classname="com.cricketlegue.IPLCricketTest" time="0.273"/>
+  <testcase name="givenIPLRunsData_whenSorted_ShouldReturnTopStrikeRate" classname="com.cricketlegue.IPLCricketTest" time="0.115"/>
+  <testcase name="givenIplWicketsData_WhenSorted_ShouldReturnTopAverage" classname="com.cricketlegue.IPLCricketTest" time="0.174"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

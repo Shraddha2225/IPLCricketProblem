@@ -8,6 +8,7 @@ public class IPLCricketDTO {
     public int  sixs;
     public  int five;
     public double strikingrates;
+    public double economy;
 
     public IPLCricketDTO(IPLCricketRunCSV iplCricketDTO) {
         player = iplCricketDTO.player;
@@ -21,9 +22,11 @@ public class IPLCricketDTO {
     public IPLCricketDTO(IPLCricketWicketCSV iplCricketWicketCSV) {
         player = iplCricketWicketCSV.player;
         runs = iplCricketWicketCSV.runs;
-        fours=iplCricketWicketCSV.four;
-        five =iplCricketWicketCSV.five;
-        strikingrates=iplCricketWicketCSV.strikingrates;
-        average=iplCricketWicketCSV.average;
+        fours = iplCricketWicketCSV.four;
+        five = iplCricketWicketCSV.five;
+        strikingrates = iplCricketWicketCSV.strikingrates;
+        average = iplCricketWicketCSV.average;
+        economy = iplCricketWicketCSV.economy ;
+
     }
 }
