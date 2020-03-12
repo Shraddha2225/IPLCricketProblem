@@ -22,17 +22,22 @@ public class IPLCricketAnalyser extends Throwable {
 
     public IPLCricketAnalyser() {
         sortedMap = new HashMap<>();
+        Comparator<IPLCricketDTO> avgStrike = Comparator.comparing((census -> census.average));
+
         this.sortedMap.put(SortedField.AVERAGE,Comparator.comparing(census -> census.average));
         this.sortedMap.put(SortedField.STRIKE_RATE,Comparator.comparing(census -> census.strikingrates));
         this.sortedMap.put(SortedField.FOUR_AND_SIX,Comparator.comparing(census -> census.fours + census.sixs));
         this.sortedMap.put(SortedField.SIX_FOUR, new CompareSixAndFour().thenComparing((census -> census.strikingrates)));
         this.sortedMap.put(SortedField.FIVE_FOUR, new CompareFiveAndFour().thenComparing((census -> census.strikingrates)));
+
+        Comparator<IPLCricketDTO> runAverage = Comparator.comparing((census -> census.runs));
         this.sortedMap.put(SortedField.RUNS,Comparator.comparing(census -> census.runs));
         this.sortedMap.put(SortedField.ECONOMY, Comparator.comparing(census -> census.economy));
+
     }
 
     public void loadIplData(CSVType type, String FilePath) throws IPLExceptionAnalyser {
-        iplCricketMap = new IplDataLoader().loadIplData(type, FilePath);
+        iplCricketMap = new IPLAdapterFactory().getIplData(type, FilePath);
     }
 
     public String getSortedIPLData(SortedField field) throws IPLExceptionAnalyser {
