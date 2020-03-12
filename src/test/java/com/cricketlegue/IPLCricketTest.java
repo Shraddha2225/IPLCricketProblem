@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class IPLCricketTest {
     private static final String IPL_MOST_RUNS_CSV_FILE_PATH = "./src/test/resources/IPL2019FactsheetMostRuns.csv";
+    private  static final String IPL_MOST_WICKETS_CSV_FILE_PATH = "./src/test/resources/IPL2019FactsheetMostWkts.csv";
+
     /*@Test
     public void givenMostRunFile_ShouldReturnCorrectData() throws IOException, IPLExceptionAnalyser, CSVBuilderException {
         IPLCricketAnalyser ipLleagueAnalysis = new IPLCricketAnalyser();
@@ -71,9 +73,18 @@ public class IPLCricketTest {
     public void givenIPLRunsData_whenSortedByRuns_ShouldReturnTopAverage() throws IPLExceptionAnalyser {
         IPLCricketAnalyser iplAnalyser = new IPLCricketAnalyser();
         iplAnalyser.loadIplData(IPL_MOST_RUNS_CSV_FILE_PATH);
-        String loadIplData = iplAnalyser.getSortedIPLData(SortedField.AVERAGE);
+        String loadIplData = iplAnalyser.getSortedIPLData(SortedField.RUNS);
         IPLCricketDTO[] censusCSV = new Gson().fromJson(loadIplData, IPLCricketDTO[].class);
-        Assert.assertEquals(416.0, censusCSV[censusCSV.length-1].runs,00);
+        Assert.assertEquals(69.2, censusCSV[censusCSV.length-1].average,00);
+    }
+
+    @Test
+    public void givenIplWicketsData_WhenSorted_ShouldReturnTopAverage() throws IPLExceptionAnalyser {
+        IPLCricketAnalyser iplAnalyser = new IPLCricketAnalyser();
+        iplAnalyser.loadIPLCricketWicketsData(IPL_MOST_WICKETS_CSV_FILE_PATH);
+        String loadIplwktsData = iplAnalyser.getSortedIPLData(SortedField.AVERAGE);
+        IPLCricketDTO[] censusCSV = new Gson().fromJson(loadIplwktsData, IPLCricketDTO[].class);
+        Assert.assertEquals(166.0, censusCSV[censusCSV.length-1].average,00);
     }
 
 }

@@ -3,7 +3,6 @@ package com.cricketlegue;
 import com.csvfile.CSVBuilderFactory;
 import com.csvfile.ICSVBuilder;
 import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -22,6 +21,8 @@ public class IPLCricketAnalyser extends Throwable {
         this.sortedMap.put(SortedField.AVERAGE,Comparator.comparing(census -> census.average));
         this.sortedMap.put(SortedField.STRIKE_RATE,Comparator.comparing(census -> census.strikingrates));
         this.sortedMap.put(SortedField.FOUR_AND_SIX,Comparator.comparing(census -> census.fours + census.sixs));
+        this.sortedMap.put(SortedField.RUNS,Comparator.comparing(census -> census.runs));
+
 
     }
     public void loadIplData(String FilePath) throws IPLExceptionAnalyser {
@@ -37,6 +38,21 @@ public class IPLCricketAnalyser extends Throwable {
             throw new IPLExceptionAnalyser(e.getMessage(), IPLExceptionAnalyser.ExceptionType.CENSUS_FILE_PROBLEM);
         }
     }
+
+
+    public void loadIPLCricketWicketsData(String FilePath) throws IPLExceptionAnalyser, IPLExceptionAnalyser {
+        try (Reader reader = Files.newBufferedReader(Paths.get(FilePath))) {
+            ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
+            Iterator <IPLCricketWicketCSV> iterator = csvBuilder.getCSVFileIterator(reader, IPLCricketWicketCSV.class);
+            Iterable<IPLCricketWicketCSV > csvIterable = () -> iterator;
+            StreamSupport.stream(csvIterable.spliterator(), false)
+                    .forEach(csvName -> iplCricketMap.put(csvName.player,new IPLCricketDTO(csvName)));
+            System.out.println(iplCricketMap);
+        } catch (IOException ex) {
+            throw new IPLExceptionAnalyser(ex.getMessage(), IPLExceptionAnalyser.ExceptionType.CENSUS_FILE_PROBLEM);
+        }
+    }
+
 
     public String getSortedIPLData(SortedField field) throws IPLExceptionAnalyser {
         if (iplCricketMap == null || iplCricketMap.size() == 0) {
