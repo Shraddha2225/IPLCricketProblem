@@ -13,32 +13,34 @@ import java.util.stream.StreamSupport;
 
 public class IPLCricketAnalyser extends Throwable {
     Map<SortedField, Comparator<IPLCricketDTO>> sortedMap=null;
-    Map<String, IPLCricketDTO> iplCricketMap =new HashMap<>();
+   Map<String, IPLCricketDTO> iplCricketMap =new HashMap<>();
     private List<IPLCricketDTO> iplCricketDTOList;
+
+    public enum CSVType{
+        RUNS,WICKETS;
+    }
 
     public IPLCricketAnalyser() {
         sortedMap = new HashMap<>();
         this.sortedMap.put(SortedField.AVERAGE,Comparator.comparing(census -> census.average));
         this.sortedMap.put(SortedField.STRIKE_RATE,Comparator.comparing(census -> census.strikingrates));
         this.sortedMap.put(SortedField.FOUR_AND_SIX,Comparator.comparing(census -> census.fours + census.sixs));
+        this.sortedMap.put(SortedField.SIX_FOUR, new CompareSixAndFour().thenComparing((census -> census.strikingrates)));
+        this.sortedMap.put(SortedField.FIVE_FOUR, new CompareFiveAndFour().thenComparing((census -> census.strikingrates)));
         this.sortedMap.put(SortedField.RUNS,Comparator.comparing(census -> census.runs));
         this.sortedMap.put(SortedField.ECONOMY, Comparator.comparing(census -> census.economy));
     }
 
-    public void loadIplRunData(String FilePath) throws IPLExceptionAnalyser {
-        iplCricketMap = new IplDataLoader().loadIplData(IPLCricketRunCSV.class, FilePath);
-    }
-
-    public void loadIPLCricketWicketsData(String FilePath) throws IPLExceptionAnalyser {
-        iplCricketMap = new IplDataLoader().loadIplData(IPLCricketWicketCSV.class, FilePath);
+    public void loadIplData(CSVType type, String FilePath) throws IPLExceptionAnalyser {
+        iplCricketMap = new IplDataLoader().loadIplData(type, FilePath);
     }
 
     public String getSortedIPLData(SortedField field) throws IPLExceptionAnalyser {
         if (iplCricketMap == null || iplCricketMap.size() == 0) {
-            throw new IPLExceptionAnalyser("No Census Data",IPLExceptionAnalyser.ExceptionType.NO_CENSUS_DATA);
+            throw new IPLExceptionAnalyser("No Data Available",IPLExceptionAnalyser.ExceptionType.NO_DATA_AVAIL);
         }
         iplCricketDTOList = iplCricketMap.values().stream().collect(Collectors.toList());
-        this.sort(iplCricketDTOList, this.sortedMap.get(field));
+        this.sort(iplCricketDTOList, this.sortedMap.get(field).reversed());
         String sortedStateCensusJson = new Gson().toJson(iplCricketDTOList);
         return sortedStateCensusJson;
     }
@@ -55,7 +57,6 @@ public class IPLCricketAnalyser extends Throwable {
             }
         }
     }
-
 }
 
 

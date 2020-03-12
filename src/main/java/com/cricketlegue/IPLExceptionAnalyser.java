@@ -1,7 +1,8 @@
 package com.cricketlegue;
 public class IPLExceptionAnalyser extends Throwable {
     enum ExceptionType{
-        NO_CENSUS_DATA,FILE_NOT_FOUND,NO_DATA_AVAIL,CENSUS_FILE_PROBLEM
+        FILE_NOT_FOUND,NO_DATA_AVAIL,CENSUS_FILE_PROBLEM;
+
     }
     ExceptionType type;
 

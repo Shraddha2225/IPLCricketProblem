@@ -15,6 +15,15 @@ import java.util.stream.StreamSupport;
 public class IplDataLoader {
     Map<String, IPLCricketDTO> iplCricketMap = new HashMap<>();
 
+    public  Map<String, IPLCricketDTO> loadIplData(IPLCricketAnalyser.CSVType type, String FilePath) throws IPLExceptionAnalyser {
+        if(type.equals(IPLCricketAnalyser.CSVType.RUNS))
+            return this.loadIplData(IPLCricketRunCSV.class,FilePath);
+        else if (type.equals(IPLCricketAnalyser.CSVType.WICKETS))
+            return  this.loadIplData(IPLCricketWicketCSV.class,FilePath);
+        else
+            throw new IPLExceptionAnalyser("Invalid data", IPLExceptionAnalyser.ExceptionType.NO_DATA_AVAIL);
+    }
+
     public <E> Map<String, IPLCricketDTO> loadIplData(Class<E> IplCSV, String FilePath) throws IPLExceptionAnalyser {
         try (Reader reader = Files.newBufferedReader(Paths.get(FilePath))) {
             ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
@@ -33,9 +42,7 @@ public class IplDataLoader {
             // System.out.println(iplCricketMap);
             return iplCricketMap;
         } catch (IOException ex) {
-            throw new IPLExceptionAnalyser(ex.getMessage(), IPLExceptionAnalyser.ExceptionType.CENSUS_FILE_PROBLEM);
+            throw new IPLExceptionAnalyser(ex.getMessage(), IPLExceptionAnalyser.ExceptionType.NO_DATA_AVAIL);
         }
     }
-
-
 }
