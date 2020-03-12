@@ -89,4 +89,13 @@ public class IPLCricketTest {
         Assert.assertEquals(120.0, censusCSV[censusCSV.length-1].strikingrates,00);
     }
 
+    @Test
+    public void givenIplWicketsData_WhenSorted_ShouldReturnBestEconomyRate() throws IPLExceptionAnalyser {
+        IPLCricketAnalyser iplAnalyser = new IPLCricketAnalyser();
+        iplAnalyser.loadIPLCricketWicketsData(IPL_MOST_WICKETS_CSV_FILE_PATH);
+        String loadIplwktsData = iplAnalyser.getSortedIPLData(SortedField.ECONOMY);
+        IPLCricketDTO[] censusCSV = new Gson().fromJson(loadIplwktsData, IPLCricketDTO[].class);
+        Assert.assertEquals("Ben Cutting", censusCSV[censusCSV.length-1].player);
+    }
+
 }
